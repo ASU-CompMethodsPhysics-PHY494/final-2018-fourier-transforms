@@ -14,7 +14,7 @@ def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=2000,nk=2000):
         gx = f(x)*np.exp(-1j*k[m]*x)
         area = np.sum(gx)*(xmax-xmin)/nx
         phi[m] = area
-        phi = np.abs(phi)
+        phi = np.real(phi)
     return k, phi
 
 

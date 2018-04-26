@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def wavefunction(x):
-    return np.exp(-x**2)
+    return 1/np.pi**0.25 / np.sqrt(8) * (4*x**2 - 2) * np.exp(-x**2 / 2)
 
 def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=2000,nk=2000):
     k = np.linspace(kmin,kmax,nk)
@@ -19,9 +19,9 @@ def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=2000,nk=2000):
 
 
 k, phi = wavetransform(wavefunction)
-phicontrol = np.sqrt(np.pi) * np.exp(- k**2 / 4)
-plt.subplot(1,2,1)
-plt.plot(k,phicontrol)
+#phicontrol = np.sqrt(np.pi) * np.exp(- k**2 / 4)
+#plt.subplot(1,2,1)
+#plt.plot(k,phicontrol)
 plt.subplot(1,2,2)
 plt.plot(k,phi)
 plt.show()

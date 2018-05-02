@@ -3,34 +3,38 @@ import matplotlib.pyplot as plt
 import scipy.fftpack
 
 
-Dt = 0.001
+Dt = 0.0001
 t = np.arange(-10,10,Dt)
-x = 1/(t**2+1)
+x = np.exp(-np.abs(t))
 
 y = np.fft.fftshift(np.fft.fft(x))
 m = Dt*np.abs(y)
 
-f = np.arange(-len(y)/2,len(y)/2)/Dt/len(y)
 f2 = np.arange(-len(y)/2,len(y)/2)/Dt/len(y)*(2*np.pi)
-ycontrolfft = 1/np.sqrt(2*np.pi) * (1/(1+1j*f2) + 1/(1-1j*f2))
 
 def wavefunction(x):
-    return 1/(x**2+1)
+    return np.exp(-np.abs(x))
 
-def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=2000,nk=2000):
+def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=20000,nk=20000):
     k = np.linspace(kmin,kmax,nk)
     x = np.linspace(xmin,xmax,nx)
-    phi = np.empty_like(k)
+    phiReal = np.empty_like(k)
+    phiImag = np.empty_like(k)
     for m in range(len(k)):
-        gx = f(x)*np.exp(-1j*k[m]*x)
-        area = np.sum(gx)*(xmax-xmin)/nx
-        phi[m] = area
-    phi = np.real(phi)
-    return k, phi
+        gxreal = f(x)*np.cos(k[m]*x)
+        areaReal = np.sum(gxreal)*(xmax-xmin)/nx
+        gximag = f(x)*np.sin(k[m]*x)
+        areaImag = np.sum(gximag)*(xmax-xmin)/nx
+        phiReal[m] = areaReal
+        phiImag[m] = areaImag
+    return k, phiReal, phiImag
 
 
-k, phi = wavetransform(wavefunction,nx=2000,nk=2000)
-ycontrolalg = np.exp(-np.abs(k))
+k, phiReal, phiImag = wavetransform(wavefunction,nx=2000,nk=2000)
+phi = phiReal + 1j*phiImag
+phi = np.abs(phi)
+ycontrolalg = np.abs(2/(k**2+1))
+
 
 plt.subplot(2,1,1)
 plt.plot(k,ycontrolalg, '-', color='rebeccapurple',label='Calculated by Hand')

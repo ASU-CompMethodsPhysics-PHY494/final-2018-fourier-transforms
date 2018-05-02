@@ -5,16 +5,16 @@ import scipy.fftpack
 
 Dt = 0.001
 t = np.arange(-10,10,Dt)
-x1 = np.exp(-t**2)
-x2 = t*np.exp(-t**2)
-x3 = (t**2-1)*np.exp(-t**2)
+x1 = np.exp(-np.abs(t))
+#x2 = t*np.exp(-t**2)
+#x3 = (t**2-1)*np.exp(-t**2)
 
 def wavefunction1(x):
-    return np.exp(-x**2)
-def wavefunction2(x):
-    return x*np.exp(-x**2)
-def wavefunction3(x):
-    return (x**2-1)*np.exp(-x**2)
+    return np.exp(-np.abs(x))
+#def wavefunction2(x):
+#    return x*np.exp(-x**2)
+#def wavefunction3(x):
+#    return (x**2-1)*np.exp(-x**2)
 
 
 def FT(f1,g1,xmin=-10,xmax=10):
@@ -45,19 +45,19 @@ def FT(f1,g1,xmin=-10,xmax=10):
     return k, phi, m, f2
 
 k, yalg1, m1, f2 = FT(wavefunction1,x1,xmin=-10,xmax=10)
-k, yalg2, m2, f2 = FT(wavefunction2,x2,xmin=-10,xmax=10)
-k, yalg3, m3, f2 = FT(wavefunction3,x3,xmin=-10,xmax=10)
-ycontrol1 = np.abs(np.sqrt(np.pi) * np.exp(-k**2 / 4))
-ycontrol2 = np.abs(-0.5*1j*k*np.sqrt(np.pi) * np.exp(-k**2 / 4))
-ycontrol3 = np.abs(-0.25*np.sqrt(np.pi) *(k**2 +2) * np.exp(-k**2 / 4))
+#k, yalg2, m2, f2 = FT(wavefunction2,x2,xmin=-10,xmax=10)
+#k, yalg3, m3, f2 = FT(wavefunction3,x3,xmin=-10,xmax=10)
+ycontrol1 = 2/(k**2+1)
+#ycontrol2 = np.abs(-0.5*1j*k*np.sqrt(np.pi) * np.exp(-k**2 / 4))
+#ycontrol3 = np.abs(-0.25*np.sqrt(np.pi) *(k**2 +2) * np.exp(-k**2 / 4))
 
 plt.subplot(2,1,1)
 plt.plot(k,ycontrol1, '-', color='rebeccapurple',label='Ground State')
-plt.plot(k,ycontrol2, '-', color='red',label='First Excited State')
-plt.plot(k,ycontrol3, '-', color='blue',label='Second Excited State')
+#plt.plot(k,ycontrol2, '-', color='red',label='First Excited State')
+#plt.plot(k,ycontrol3, '-', color='blue',label='Second Excited State')
 plt.title('Calculated by Hand')
 plt.xlim(-10,10)
-plt.ylim(0,2)
+plt.ylim(0,2.5)
 plt.xlabel('k')
 plt.ylabel('Phi(k)')
 plt.title('K-Space Transforms for the Harmonic Oscillator')
@@ -65,12 +65,12 @@ plt.legend()
 plt.subplot(2,1,2)
 plt.plot(f2,m1,'o',color='cornflowerblue',label='FFT Ground State')
 plt.plot(k,yalg1,'-',color='firebrick',label='Algorithm Ground State')
-plt.plot(f2,m2,'o',color='green',label='FFT First Excited State')
-plt.plot(k,yalg2,'-',color='orchid',label='Algorithm First Excited State')
-plt.plot(f2,m3,'o',color='orange',label='FFT Second Excited State')
-plt.plot(k,yalg3,'-',color='black',label='Algorithm Second Excited State')
+#plt.plot(f2,m2,'o',color='green',label='FFT First Excited State')
+#plt.plot(k,yalg2,'-',color='orchid',label='Algorithm First Excited State')
+#plt.plot(f2,m3,'o',color='orange',label='FFT Second Excited State')
+#plt.plot(k,yalg3,'-',color='black',label='Algorithm Second Excited State')
 plt.xlim(-10,10)
-plt.ylim(0,2)
+plt.ylim(0,2.5)
 plt.xlabel('k')
 plt.ylabel('Phi(k)')
 plt.title('FFT and Algorithm Outputs')

@@ -1,0 +1,16 @@
+Fourier Transforms with Wave Functions
+
+Lauren Farmer, Dakota King, Jonah Shoemaker
+
+The purpose of this study was to find the most efficient method of using Python to compute momentum-space Fourier transforms of one-dimensional position-space wave functions. Three methods were used: calculating the transforms by hand as a control, using the FFT function in Numpy, and building an algorithm to find the transforms. The algorithm was built with a for loop, which calculated the FT integral with different discrete wave-number values in each iteration using a Riemann sum technique. While the home-made algorithm was less accurate than the FFT function, it was designed to be easier to implement by the user for quantum transform applications. In addition, the self-designed algorithm was less robust at evaluating complex-valued wave functions, but more versatile at handling real-valued sinusoidal functions with no additional modifications required. Future goals include expanding the algorithm into multiple dimensions and incorporating numerical evaluations of complicated potentials to implement an all-inclusive user-friendly package for finding both position- and momentum-space functions of any potential.
+
+Code is available at <https://github.com/ASU-CompMethodsPhysics-PHY494/final-2018-fourier-transforms/blob/18f27b24f447f759822a78eb78f68eab74755f70/transform2.py>
+
+Contributions:
+
+All three group members worked on the home-made algorithm and designed/will design the poster as a group. Breakdown of contributions to Background, Methods, Results coming soon to a symposium near you
+
+Lauren Farmer: Designed error calculation algorithm to compare FFT and HM algorithm to control quantitatively
+Dakota King: Calculated harmonic oscillator, infinite square well, delta potential transforms by hand, tested the various methods for bugs on the different wave functions
+Jonah Shoemaker: Calculated free particle transform by hand, primary contributor to incorporation of the FFT function, incorporated HM algorithm, FFT, and control into one overall FT function
+

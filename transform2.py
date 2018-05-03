@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.fftpack
 
 
-Dt = 0.001
+Dt = np.pi/10
 t = np.linspace(-10,10,20/Dt)
 x1 = np.sqrt(2)*np.sin(np.pi*t)
 x2 = np.sqrt(2)*np.sin(2 * np.pi*t)
@@ -17,7 +17,7 @@ def wavefunction3(x):
     return np.sqrt(2)*np.sin(3*np.pi*x)
 
 
-def FT(f1,g1,xmin=-15,xmax=15):
+def FT(f1,g1,xmin=-10,xmax=10):
 
     y = np.fft.fftshift(np.fft.fft(g1))
     m = y
@@ -25,7 +25,7 @@ def FT(f1,g1,xmin=-15,xmax=15):
 
     f2 = np.linspace(-1/(2*Dt),1/(2*Dt),len(y))*(2*np.pi)
 
-    def wavetransform(f1,xmin=xmin,xmax=xmax,kmin=-15,kmax=15,nx=2000,nk=2000):
+    def wavetransform(f1,xmin=xmin,xmax=xmax,kmin=-10,kmax=10,nx=20/Dt,nk=20/Dt):
         k = np.linspace(kmin,kmax,nk)
         x = np.linspace(xmin,xmax,nx)
         phiReal = np.empty_like(k)
@@ -71,7 +71,7 @@ plt.plot(f2,m2,'-',color='green',label='FFT First Excited State')
 plt.plot(k,yalg2,'-',color='orchid',label='Algorithm First Excited State')
 plt.plot(f2,m3,'-',color='orange',label='FFT Second Excited State')
 plt.plot(k,yalg3,'-',color='black',label='Algorithm Second Excited State')
-plt.xlim(-15,15)
+plt.xlim(-16,16)
 plt.ylim(0,10)
 plt.xlabel('k')
 plt.ylabel('Phi(k)')

@@ -1,93 +1,44 @@
-import numpy as np
-
-import matplotlib.pyplot as plt
-
-import scipy.fftpack
-
+Dt = 1
+for k in 10:
+    t = np.linspace(-10,10,20/Dt)
+    x1 = np.sqrt(2)*np.sin(np.pi*t)
 
 
-
-
-
-
-t = np.arange(-10,10,0.01)
-
-x = t * np.exp(-t**2)
+    def wavefunction1(x):
+        return np.sqrt(2)*np.sin(np.pi*x)
 
 
 
-y = np.fft.fftshift(np.fft.fft(x))
+    def FT(f1,g1,xmin=-15,xmax=15):
 
-m = 0.01*np.abs(y)
+        y = np.fft.fftshift(np.fft.fft(g1))
+        m = y
+        m = np.abs(m)
 
+        f2 = np.linspace(-1/(2*Dt),1/(2*Dt),len(y))*(2*np.pi)
 
-
-f = np.arange(-len(y)/2,len(y)/2)*100/len(y)
-
-f2 = np.arange(-len(y)/2,len(y)/2)*100/len(y)*(2*np.pi)
-
-ycontrolfft = np.sqrt(np.pi) * np.exp(-np.pi**2 * f**2)
-
-
-
-def wavefunction(x):
-
-    return x * np.exp(-x**2)
-
-
-
-def wavetransform(f,xmin=-10,xmax=10,kmin=-10,kmax=10,nx=2000,nk=2000):
-
-    k = np.linspace(kmin,kmax,nk)
-
-    x = np.linspace(xmin,xmax,nx)
-
-    phi = np.empty_like(k)
-
-    for m in range(len(k)):
-
-        gx = f(x)*np.exp(-1j*k[m]*x)
-
-        area = np.sum(gx)*(xmax-xmin)/nx
-
-        phi[m] = area
-
-    phi = np.real(phi)
-
-    return k, phi
+        def wavetransform(f1,xmin=xmin,xmax=xmax,kmin=-15,kmax=15,nx=2000,nk=2000):
+            k = np.linspace(kmin,kmax,nk)
+            x = np.linspace(xmin,xmax,nx)
+            phiReal = np.empty_like(k)
+            phiImag = np.empty_like(k)
+            for m in range(len(k)):
+                gxreal = f1(x)*np.cos(k[m]*x)
+                areaReal = np.sum(gxreal)*(xmax-xmin)/nx
+                gximag = f1(x)*np.sin(k[m]*x)
+                areaImag = np.sum(gximag)*(xmax-xmin)/nx
+                phiReal[m] = areaReal
+                phiImag[m] = areaImag
+            return k, phiReal, phiImag
 
 
+        k, phiReal, phiImag = wavetransform(f1,xmin,xmax)
+        phi = phiReal + 1j*phiImag
+        phi = np.abs(phi)
+        return k, phi, m, f2
 
+    k, yalg1, m1, f2 = FT(wavefunction1,x1,xmin=-10,xmax=10)
 
-
-k, phi = wavetransform(wavefunction)
-
-ycontrolalg = np.sqrt(np.pi) *np.exp(- k**2 /4)
-
-
-
-plt.subplot(2,2,1)
-
-plt.plot(f2,ycontrolalg)
-
-plt.title('FFT Version Calculated by Hand')
-
-plt.subplot(2,2,2)
-
-plt.plot(f2,m)
-
-plt.title('Calculated with FFT')
-
-plt.subplot(2,2,3)
-
-plt.plot(k,ycontrolalg)
-
-plt.title('Algorithm Version Calculated by Hand')
-
-plt.subplot(2,2,4)
-
-plt.plot(k,phi)
-
-plt.title('Calculated with Algorithm')
-
-plt.show()
+    #time it and assign the time into a list
+    #assign Dt into a list
+    #divide Dt into half
